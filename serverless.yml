@@ -1,0 +1,33 @@
+service: whereitsatapi
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: krisperssonRegularUser
+  region: eu-north-1
+  iam:
+    role: arn:aws:iam::619468094687:role/LambdaAPIGatewayDynamoDB
+
+plugins:
+  - serverless-webpack
+
+functions:
+  getEvents:
+    handler: src/functions/getEvents/index.handler
+    events:
+    - httpApi:
+        path: '/api/events'
+        method: GET
+  orderTicket:
+    handler: src/functions/orderTicket/index.handler
+    events:
+    - httpApi:
+        path: '/api/ticket/order'
+        method: POST
+  verifyTicket:
+    handler: src/functions/verifyTicket/index.handler
+    events:
+    - httpApi:
+        path: '/api/ticket/verify'
+        method: PUT
