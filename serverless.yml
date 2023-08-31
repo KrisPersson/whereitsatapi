@@ -6,11 +6,15 @@ provider:
   runtime: nodejs18.x
   profile: krisperssonRegularUser
   region: eu-north-1
+  deploymentMethod: direct
   iam:
     role: arn:aws:iam::619468094687:role/LambdaAPIGatewayDynamoDB
 
 plugins:
   - serverless-webpack
+
+package:
+  individually: true
 
 functions:
   getEvents:

@@ -2,7 +2,6 @@ const { sendResponse } = require('../../responses/index')
 const events = require('../../events.json')
 const { v4: uuidv4 } = require('uuid');
 
-
 const ticketAmounts = [
   { eventId: 1, totalTickets: 100 },
   { eventId: 2, totalTickets: 50 },
@@ -11,11 +10,12 @@ const ticketAmounts = [
 ]
 
 async function postOrderTicket(body) {
+  const parsedBody = JSON.parse(body)
   const orderedTicket = {
     ticketId: uuidv4(),
-    eventInfo: events.find(ev => ev.id === body.eventId)
+    eventInfo: events.events.find(ev => ev.id == parsedBody.eventId)
   }
-  sendResponse(200, orderedTicket)
+  return sendResponse(200, orderedTicket)
 }
 
 module.exports.handler = async (event) => {
