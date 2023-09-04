@@ -1,4 +1,5 @@
 const { sendResponse } = require('../../responses/index')
+const { db } = require('../../services/db')
 const events = require('../../events.json')
 const { v4: uuidv4 } = require('uuid');
 
@@ -11,14 +12,27 @@ const ticketAmounts = [
 
 async function postOrderTicket(body) {
   const parsedBody = JSON.parse(body)
+  
   const orderedTicket = {
-    ticketId: uuidv4(),
-    eventInfo: events.events.find(ev => ev.id == parsedBody.eventId)
+    id: uuidv4(),
+    eventId: parsedBody.eventId,
+    eventInfo: events.events.find(ev => ev.id == parsedBody.eventId),
+    redeemed: null
   }
+
+  await db.put({
+    TableName: 'tickets',
+    Item: {...orderedTicket}
+  }).promise()
+
   return sendResponse(200, orderedTicket)
 }
 
 module.exports.handler = async (event) => {
   console.log(event)
-  return postOrderTicket(event.body)
+  try {
+    return await postOrderTicket(event.body)
+  } catch (error) {
+    return sendResponse(400, error.message)
+  }
 };

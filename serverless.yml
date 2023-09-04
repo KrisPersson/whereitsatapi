@@ -35,3 +35,23 @@ functions:
     - httpApi:
         path: '/api/ticket/verify'
         method: PUT
+  deleteTicket:
+    handler: src/functions/deleteTicket/index.handler
+    events:
+    - httpApi:
+        path: '/api/ticket/delete'
+        method: DELETE
+
+resources:
+    Resources: 
+        ticketsDb:
+            Type: AWS::DynamoDB::Table
+            Properties: 
+                TableName: tickets
+                AttributeDefinitions:
+                    - AttributeName: id
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: id
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST

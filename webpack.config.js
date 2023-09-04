@@ -1,3 +1,6 @@
+const slsw = require("serverless-webpack");
+
 module.exports = {
-	mode: 'development'
-}
+  mode: slsw.lib.webpack.isLocal ? "development" : "production",
+  entry: slsw.lib.entries
+};
